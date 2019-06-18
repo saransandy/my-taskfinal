@@ -256,6 +256,29 @@ input[type=number]::-webkit-outer-spin-button {
 </head>
 
 <body>
+    <script>
+          function readyList() {
+      	    $(function () {
+      	        var xhr = new XMLHttpRequest();
+      	        xhr.onreadystatechange = function () {
+      	            if (xhr.readyState == 4 && xhr.status == 200) {
+      	                var items = xhr.responseText;
+						items = JSON.parse(items);
+      	                var list = "";
+      	                for (var i = 0; i < items.length; i++) {
+          	                var item = items[i]["itemname"];
+      	                    list += '<option value="' + item + '"></option>'
+      	                }
+      	                document.getElementById("list").innerHTML += list;
+      	            }
+      	        }
+      	        xhr.open("POST", "ItemsInvoice", true);
+      	        xhr.send();
+
+      	    });
+      	}          
+          </script>
+
     <h1 id="user"> </h1>
     <div class="box1">
     <form:form action="check" modelAttribute="con">
@@ -274,7 +297,7 @@ input[type=number]::-webkit-outer-spin-button {
             <a id="loop" class="w2-button w2-black" onclick="flipflop()">ADD</a>
             <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
             <a class="w2-button w2-black" onclick="flipflop4()" style="left:20%">delete</a>
-            <a class="w3-button w3-black" href="/" onclick="signOut();">Sign out</a>
+            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
             <br><br>
             <div class="container">
                 <table id="my-final-table">
@@ -303,6 +326,10 @@ input[type=number]::-webkit-outer-spin-button {
                 </table>
             </div>
         </div>
+        
+       
+                            
+        
         <form id="form" class="box" style="visibility: hidden;" class="box" onsubmit="validateRegistration(); return false;">
             <a class="w2-button w2-black" onclick="flipflop2()">Cancel</a>
             <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
@@ -316,20 +343,145 @@ input[type=number]::-webkit-outer-spin-button {
             <input name="uom" type="text" placeholder="Item Uom" maxlength="25" required>
             <input type="submit" value="Done">
         </form>
-         <form id="form1" class="box" style="visibility: hidden;" class="box" onsubmit="validateRegistration(); return false;">
+         <form id="form1" class="box" style="visibility: hidden;" class="box" onsubmit="update(); return false;">
             <a class="w2-button w2-black" onclick="flipflop()">ADD</a>
-            <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
-            <a class="w2-button w2-black" onclick="flipflop2()"  style="left:20%">cancel</a>
-            <a class="w3-button w3-black" href="/" onclick="signOut();">Sign out</a>
-            <h1 style="text-align:center;">Delete a Product</h1>
-            <input name="item" type="text" placeholder="Item Name" maxlength="25" required>
-                   <input name="price" type="text" placeholder="Item price" required pattern="[1-9]{1}[0-9]{1,5}" title="Enter a valid mobile number">
+            <a class="w2-button w2-black" onclick="flipflop2()" style="left:10%">cancel</a>
+            <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>
+            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <h1 style="text-align:center;">update a Product</h1>
+            
+            <input name="item" type="text" list="datalist" placeholder="Item Name" maxlength="25" onclick="readyList()" onchange="autofill1()" required>
+            <datalist id="datalist">		
+			<div id="list"></div>
+           </datalist>
+            <input name="price" type="text" placeholder="Item price" required pattern="[1-9]{1}[0-9]{1,5}" title="Enter a valid mobile number">
             <input name="desc" type="text" placeholder="Item Description" maxlength="100" required>
             <input name="key" type="text" placeholder="Item Key" maxlength="25" required>
             <input name="uom" type="text" placeholder="Item Uom" maxlength="25" required>
-            <input type="submit" value="Done">
+            <input type="submit" value="update">
+        </form>
+        <form id="form2" class="box" style="visibility: hidden;" class="box" onsubmit="delete1(); return false;">
+            <a class="w2-button w2-black" onclick="flipflop()">ADD</a>
+            <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
+            <a class="w2-button w2-black" onclick="flipflop2()"  style="left:20%">cancel</a>
+            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <h1 style="text-align:center;">Delete a Product</h1>
+            <input name="item" type="text" list="datalist" placeholder="Item Name" maxlength="25" onclick="readyList()" onchange="autofill()" required>
+            <datalist id="datalist">		
+			<div id="list"></div>
+           </datalist>
+            <input name="price" type="text" placeholder="Item price" pattern="[1-9]{1}[0-9]{1,5}" title="Enter a valid mobile number"readonly>
+            <input  name="desc" type="text" placeholder="Item Description" maxlength="100" readonly>
+            <input  name="key" type="text" placeholder="Item Key" maxlength="25" readonly>
+            <input name="uom" type="text" placeholder="Item Uom" maxlength="25" readonly>
+            <input type="submit" value="Delete">
         </form>
     </div>
+    
+
+    
+    <script type="text/javascript">
+		function update(){
+			var no=0;
+	        var item = document.getElementsByName("item")[1].value;
+	        var price = document.getElementsByName("price")[1].value;
+	        var desc  = document.getElementsByName("desc")[1].value;
+	        var key  = document.getElementsByName("key")[1].value;
+	        var uom  = document.getElementsByName("uom")[1].value;
+	        var xhr = new XMLHttpRequest();
+	        xhr.onreadystatechange = function () {
+	            if(xhr.readyState==4 && xhr.status==200){
+	            	var item343=xhr.responeText;
+	            	console.log(item343);
+	            }
+	        }
+	        var url ="no="+no+"&itemname="+item+"&price="+price+"&desc="+desc+"&key="+key+"&uom="+uom;
+	        console.log(url);
+	        url="updateitems?"+url;
+	        xhr.open("POST",url,true);
+	        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	        xhr.send();
+	        flipflop2();
+		}
+		function delete1(){
+			var no=0;
+	        var item = document.getElementsByName("item")[2].value;
+	        var xhr = new XMLHttpRequest();
+	        xhr.onreadystatechange = function () {
+	            if(xhr.readyState==4 && xhr.status==200){
+	            	var item343=xhr.responeText;
+	            	console.log(item343);
+	            }
+	        }
+	        var url ="&itemname="+item;
+	        console.log(url);
+	        url="deleteitems?"+url;
+	        xhr.open("POST",url,true);
+	        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	        xhr.send();
+	        flipflop2();
+		}
+    	function autofill(){
+    	    		
+    		var deleteid = 2;
+    		var itemname = document.getElementsByName("item")[deleteid].value;
+    	    var xhr = new XMLHttpRequest();
+    	    var price = "";
+    	    var desc = "";
+    	    var key = "";
+    	    var uom = "";
+    		xhr.onreadystatechange = function(){
+    			if(xhr.readyState==4 && xhr.status == 200){
+    				var response = xhr.responseText;
+    				console.log(response);
+    				response = JSON.parse(response);
+    				price = response[0]["itemprice"];
+    			    desc = response[0]["itemdisc"];
+    				key = response[0]["itemkey"];
+    				uom = response[0]["itemuom"];
+					document.getElementsByName("price")[deleteid].value = price;
+					document.getElementsByName("desc")[deleteid].value = desc;
+					document.getElementsByName("key")[deleteid].value = key;
+					document.getElementsByName("uom")[deleteid].value = uom;
+    					
+    			}
+    		}
+    		var url = 'DeleteItem?itemname=' + itemname;  
+    		xhr.open("POST",url,true);
+    		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    		xhr.send(); 
+    	}
+    	function autofill1(){
+    		var deleteid = 1;
+    		var itemname = document.getElementsByName("item")[deleteid].value;
+    	    var xhr = new XMLHttpRequest();
+    	    var price = "";
+    	    var desc = "";
+    	    var key = "";
+    	    var uom = "";
+    		xhr.onreadystatechange = function(){
+    			if(xhr.readyState==4 && xhr.status == 200){
+    				var response = xhr.responseText;
+    				console.log(response);
+    				response = JSON.parse(response);
+    				price = response[0]["itemprice"];
+    			    desc = response[0]["itemdisc"];
+    				key = response[0]["itemkey"];
+    				uom = response[0]["itemuom"];
+					document.getElementsByName("price")[deleteid].value = price;
+					document.getElementsByName("desc")[deleteid].value = desc;
+					document.getElementsByName("key")[deleteid].value = key;
+					document.getElementsByName("uom")[deleteid].value = uom;
+    					
+    			}
+    		}
+    		var url = 'DeleteItem?itemname=' + itemname;  
+    		xhr.open("POST",url,true);
+    		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    		xhr.send(); 
+    	}
+    </script>
+    
     <script type="text/javascript">
     onafter();
 	/* var xhr = new XMLHttpRequest();
@@ -390,22 +542,29 @@ input[type=number]::-webkit-outer-spin-button {
     	document.getElementById('form').style.visibility = 'visible';
     	document.getElementById('login').style.visibility = 'hidden';
     	document.getElementById('form1').style.visibility = 'hidden';
+    	document.getElementById('form2').style.visibility = 'hidden';
+
     }
     function flipflop2(){
     	document.getElementById('form').style.visibility = 'hidden';
     	document.getElementById('login').style.visibility = 'visible';
     	document.getElementById('form1').style.visibility = 'hidden';
+    	document.getElementById('form2').style.visibility = 'hidden';
     	document.getElementById('form').reset();
     }
     function flipflop3(){
     	document.getElementById('form1').style.visibility = 'visible';
     	document.getElementById('form').style.visibility = 'hidden';
     	document.getElementById('login').style.visibility = 'hidden';
+    	document.getElementById('form2').style.visibility = 'hidden';
+
     }
     function flipflop4(){
-    	document.getElementById('form1').style.visibility = 'visible';
+    	document.getElementById('form2').style.visibility = 'visible';
     	document.getElementById('form').style.visibility = 'hidden';
     	document.getElementById('login').style.visibility = 'hidden';
+    	document.getElementById('form1').style.visibility = 'hidden';
+
     }
     function onafter(){
     	var xhr = new XMLHttpRequest();

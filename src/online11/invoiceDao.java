@@ -18,8 +18,8 @@ JdbcTemplate template;
 	public void setTemplate(JdbcTemplate template) {    
 	    this.template = template;    
 	}    
-	public int add(customerData p){    
-	    String sql="insert into customers(customer_name,customer_firstname,customer_lastname,customer_phno,customer_dob,customer_emailid,customer_fax,customer_address,customer_city,customer_state,customer_pin) values('"+p.getCustomer_name()+"','"+p.getCustomer_firstname()+"','"+p.getCustomer_lastname()+"','"+p.getCustomer_phno()+"','"+p.getCustomer_dob()+"','"+p.getCustomer_emailid()+"',"+p.getCustomer_fax()+",'"+p.getCustomer_address()+"','"+p.getCustomer_city()+"','"+p.getCustomer_state()+"',"+p.getCustomer_pin()+")";    
+	public int add(invoiceData p){    
+	    String sql="insert into itemsordered values("+p.getInvoice_id()+",'"+p.getItemname()+"',"+p.getItem_price()+","+p.getItem_quantity()+","+p.getItem_id()+","+"now()"+",'"+p.getcustomername()+"')";    
 	    System.out.println("inserted into the table"+ sql);
 	    System.out.println(template);
 	    int a=template.update(sql);
@@ -43,15 +43,25 @@ JdbcTemplate template;
 	    
 	//}
 	public List<invoiceData> getinvoices(){    
-	    return template.query("select invoiceid,custid,sum(itemprice) as grandtotal from itemsordered group by invoiceid",new RowMapper<invoiceData>(){    
+	    return template.query("select invoiceid,customername,sum(itemprice) as grandtotal,data_and_time from itemsordered group by invoiceid",new RowMapper<invoiceData>(){    
 	        public invoiceData mapRow(ResultSet rs, int row) throws SQLException {    
 	            invoiceData e=new invoiceData();    
 	            e.setInvoice_id(rs.getInt(1));    
-	            e.setCust_id(rs.getString(2));    
-	            e.setGrand_total(rs.getInt(3));         
+	            e.setcustomername(rs.getString(2));    
+	            e.setGrand_total(rs.getInt(3)); 
+	            e.setDate_and_time(rs.getString(4));
 	            return e;    
 	        }    
 	    });    
 	    
+	}
+	public List<invoiceData> invoicelast(){    
+	    return template.query("SELECT MAX(INVOICEID) AS INVOICEID FROM ITEMSORDERED",new RowMapper<invoiceData>(){    
+	        public invoiceData mapRow(ResultSet rs, int row) throws SQLException {    
+	            invoiceData e=new invoiceData();    
+	            e.setInvoice_id(rs.getInt(1));         
+	            return e;    
+	        }    
+	    });    
 	}
 }

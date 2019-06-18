@@ -49,7 +49,7 @@
         </form:form>
         
     </div>
-   <!--  <script type="text/javascript">
+     <script type="text/javascript">
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -69,10 +69,10 @@
                 }
             }
 
-            xhr.open("GET", url, true);
+            xhr.open("POST", url, true);
             xhr.send();
         }
-    </script> -->
+    </script>
 </body>
 
 </html>

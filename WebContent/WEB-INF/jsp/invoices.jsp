@@ -218,6 +218,48 @@ input::-webkit-calendar-picker-indicator {
 </head>
 
 <body>
+<script>
+          function readyList() {
+        	    $(function () {
+        	        var xhr = new XMLHttpRequest();
+        	        xhr.onreadystatechange = function () {
+        	            if (xhr.readyState == 4 && xhr.status == 200) {
+        	                var items = xhr.responseText;
+  						items = JSON.parse(items);
+        	                var list = "";
+        	                for (var i = 0; i < items.length; i++) {
+            	                var item = items[i]["itemname"];
+        	                    list += '<option value="' + item + '"></option>'
+        	                }
+        	                document.getElementById("list").innerHTML += list;
+        	            }
+        	        }
+        	        xhr.open("POST", "ItemsInvoice", true);
+        	        xhr.send();
+
+        	    });
+        	}
+          function readyList1() {
+      	    $(function () {
+      	        var xhr = new XMLHttpRequest();
+      	        xhr.onreadystatechange = function () {
+      	            if (xhr.readyState == 4 && xhr.status == 200) {
+      	                var items = xhr.responseText;
+						items = JSON.parse(items);
+      	                var list = "";
+      	                for (var i = 0; i < items.length; i++) {
+          	                var item = items[i]["customer_name"];
+      	                    list += '<option value="' + item + '"></option>'
+      	                }
+      	                document.getElementById("list1").innerHTML += list;
+      	            }
+      	        }
+      	        xhr.open("POST", "customersInvoice", true);
+      	        xhr.send();
+
+      	    });
+      	}
+          </script>
     <h1 id="user"> </h1>
      <div class="box1">
     <form:form action="check" modelAttribute="con">
@@ -240,16 +282,18 @@ input::-webkit-calendar-picker-indicator {
                 <thead>
                     <tr>
                         <th>invoice_id</th>
-                        <th>cust_id</th>
+                        <th>customername</th>
                         <th>grand_total</th>
+                        <th>date_and_time</th>
                     </tr>
                 </thead>
 
                 <tfoot>
                     <tr>
                         <th>invoice_id</th>
-                        <th>cust_id</th>
+                        <th>customername</th>
                         <th>grand_total</th>
+                        <th>date_and_time</th>
                     </tr>
                 </tfoot>
                 <tbody>
@@ -260,7 +304,12 @@ input::-webkit-calendar-picker-indicator {
     <div id="form2" class="container" style="height:100vh;visibility:hidden;top:22%;width: 108vh;">
         <div class="row clearfix">
             <div class="col-md-6">
-                <a class="w3-button w3-black" href="index.html" onclick="signOut();" style="left: 80%;">Sign out</a>
+            <input type="text" list="datalist1" name='customer_name' placeholder='Enter customer Name' class="form-control" onclick="readyList1()" required></input>
+            <datalist id="datalist1"> 		
+			<div id="list1"></div>
+            </div>
+            <div class="col-md-6">
+            <a class="w3-button w3-black" href="index.html" onclick="signOut();" style="left: 80%;">Sign out</a>
             </div>
         </div>
 
@@ -279,11 +328,11 @@ input::-webkit-calendar-picker-indicator {
                     <tbody>
                         <tr id='addr0'>
                             <td>1</td>
-                            <td><input type="text" list="datalist" name='itemname' placeholder='Enter Product Name' class="form-control" onchange="itemprice()" required></input>
+                            <td><input type="text" list="datalist" name='itemname' placeholder='Enter Product Name' class="form-control" onclick="readyList()" onchange="autofill1()" required></input>
                             </td>
-
                             <datalist id="datalist"> 		
-			<div id="list"></div>
+							<div id="list"></div>
+							</datalist>
             <td><input type="number" name='itemquantity' placeholder='Enter Qty' class="form-control qty" step="0" min="0" required></input></td>
             <td><input id="inputTwo" type="number" name='itemprice' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0" readonly></input></td>
             <td><input type="number" name='total' placeholder='0.00' class="form-control total" readonly/></td>
@@ -291,28 +340,7 @@ input::-webkit-calendar-picker-indicator {
           <tr id='addr1'></tr>
         </tbody>
       </table>
-          <script>
-          function readyList() {
-      	    $(function () {
-      	        var xhr = new XMLHttpRequest();
-      	        xhr.onreadystatechange = function () {
-      	            if (xhr.readyState == 4 && xhr.status == 200) {
-      	                var items = xhr.responseText;
-      	                var item = items.split(",");
-      	                var list = "";
-      	                for (var i = 0; i < item.length; i++) {
-      	                    list += '<option value="' + item[i] + '"></option>'
-      	                }
-      	                document.getElementById("list").innerHTML += list;
-      	            }
-      	        }
-      	        xhr.open("GET", "ItemsInvoice", true);
-      	        xhr.send();
-
-      	    });
-      	}
-          		readyList();
-          </script>
+          
     </div>
   </div>
   <div class="row clearfix">
@@ -436,6 +464,32 @@ input::-webkit-calendar-picker-indicator {
 	    xhr.open("GET", url, true);
 	    xhr.send();
 	}
+	function autofill1(){
+		var namesObj = document.getElementsByName("itemname");
+	    var xhr = new XMLHttpRequest();
+	    var itemnames = "";
+	    for (var i = 0; i < namesObj.length; i++) {
+	        if (i != 0) {
+	            itemnames += ",";
+	        }
+	        itemnames += namesObj[i].value;
+	    }
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState==4 && xhr.status == 200){
+				response = xhr.responseText;
+				console.log("price:"+response);
+	            var price = response.split(",");
+	            var itemprice = document.getElementsByName("itemprice")
+	            for (var i = 0; i < price.length; i++) {
+	                itemprice[i].value = price[i];
+	            }	
+			}
+		}
+		var url = 'priceget?itemname=' + itemnames;  
+		xhr.open("POST",url,true);
+		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xhr.send(); 
+	}
 	function invoiceData() {
 	    const namesObj = document.getElementsByName("itemname");
 	    const pricesObj = document.getElementsByName("total");
@@ -443,6 +497,7 @@ input::-webkit-calendar-picker-indicator {
 	    var itemnames = "";
 	    var itemprices = "";
 	    var itemquantities = "";
+	    var customersname=document.getElementsByName("customer_name")[0].value;
 	    for (var i = 0; i < namesObj.length; i++) {
 	        if (i != 0) {
 	            itemnames += ",";
@@ -469,9 +524,9 @@ input::-webkit-calendar-picker-indicator {
 	            alert("Inserted");
 	        }
 	    }
-	    url += "itemnames=" + itemnames + "&itemprices=" + itemprices + "&itemquantities=" + itemquantities;
+	    url += "itemnames=" + itemnames + "&itemprices=" + itemprices + "&itemquantities=" + itemquantities+"&customer_name="+customersname;
 	    console.log("URL : " + url);
-	    xhr.open("GET", url, true);
+	    xhr.open("POST", url, true);
 	    xhr.send();
 	}
 	$(document).ready(function () {

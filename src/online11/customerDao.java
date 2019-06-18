@@ -25,12 +25,13 @@ JdbcTemplate template;
 	    int a=template.update(sql);
 	    return a;    
 	}    
-	public int update(itemData p){    
-	    String sql="update items set item_name='"+p.getItemname()+"', item_price="+p.getItemprice()+",item_discription='"+p.getItemdisc()+",item_key='"+p.getItemkey()+",item_uom='"+p.getItemuom()+"' where itemid="+p.getItemid()+"";    
+	public int update(customerData p){    
+	    String sql="update customers set customer_firstname='" + p.getCustomer_firstname() +"',customer_lastname='" + p.getCustomer_lastname() + "',customer_phno='" + p.getCustomer_phno() +"', customer_dob='"+ p.getCustomer_dob() + "', customer_emailid='" + p.getCustomer_emailid() + "', customer_fax=" + p.getCustomer_fax() + ", customer_address='" + p.getCustomer_address() + "', customer_city='" + p.getCustomer_city() + "', customer_state='"+ p.getCustomer_state() + "', customer_pin=" + p.getCustomer_pin()+" where customer_name='"+p.getCustomer_name()+"'" ;    
+	    System.out.println("update:"+sql);
 	    return template.update(sql);    
 	}    
-	public int delete(int id){    
-	    String sql="delete from items where itemid="+id+"";    
+	public int delete(String id){    
+	    String sql="delete from customers where customer_name='"+id+"'";    
 	    return template.update(sql);    
 	}    
 	public List<customerData> getcustomers(){    
@@ -45,5 +46,25 @@ JdbcTemplate template;
 	        }    
 	    });    
 	    
+	}
+	
+	public List<customerData> itemRetrival( String itemname ) {
+		return template.query("select * from customers where customer_name ='"+itemname+"'",new RowMapper<customerData>(){    
+	        public customerData mapRow(ResultSet rs, int row) throws SQLException {    
+	            customerData e=new customerData();     
+	            e.setCustomer_name(rs.getString(2));
+	    		e.setCustomer_firstname(rs.getString(3));
+	    		e.setCustomer_lastname(rs.getString(4));
+	    		e.setCustomer_phno(rs.getString(5));
+	    		e.setCustomer_dob(rs.getString(6));
+	    		e.setCustomer_emailid(rs.getString(7));
+	    		e.setCustomer_fax(rs.getInt(8));
+	    		e.setCustomer_address(rs.getString(9));
+	    		e.setCustomer_city(rs.getString(10));
+	    		e.setCustomer_state(rs.getString(11));
+	    		e.setCustomer_pin(rs.getInt(12));
+	            return e;    
+	        }    
+	    });    
 	}
 }

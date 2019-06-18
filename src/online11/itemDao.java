@@ -28,11 +28,13 @@ public class itemDao {
 	    return a;    
 	}    
 	public int update(itemData p){    
-	    String sql="update items set item_name='"+p.getItemname()+"', item_price="+p.getItemprice()+",item_discription='"+p.getItemdisc()+",item_key='"+p.getItemkey()+",item_uom='"+p.getItemuom()+"' where itemid="+p.getItemid()+"";    
+	    String sql="update items set item_price="+p.getItemprice()+",item_description='"+p.getItemdisc()+"',item_key='"+p.getItemkey()+"',item_uom='"+p.getItemuom()+"' where item_name='"+p.getItemname()+"'";    
+	    System.out.println("update:"+sql);
 	    return template.update(sql);    
 	}    
-	public int delete(int id){    
-	    String sql="delete from items where itemid="+id+"";    
+	public int delete(String id){    
+	    String sql="delete from items where item_name='"+id+"'";
+	    System.out.println("delete:"+sql);
 	    return template.update(sql);    
 	}    
 	public List<itemData> getitems(){    
@@ -49,6 +51,29 @@ public class itemDao {
 	        }    
 	    });    
 	    
+	}
+	public List<itemData> price(String name) {
+		return template.query("select item_price from items where item_name = '"+name+"'",new RowMapper<itemData>(){    
+	        public itemData mapRow(ResultSet rs, int row) throws SQLException {    
+	            itemData e=new itemData();    
+	            e.setItemprice(rs.getInt(1));     
+	            return e;    
+	        }    
+	    });   
+	}
+	public List<itemData> itemRetrival( String itemname ) {
+		return template.query("select * from items where item_name = \""+itemname+"\"",new RowMapper<itemData>(){    
+	        public itemData mapRow(ResultSet rs, int row) throws SQLException {    
+	            itemData e=new itemData();    
+	            e.setItemid(rs.getInt(1));    
+	            e.setItemname(rs.getString(2));    
+	            e.setItemprice(rs.getInt(3));    
+	            e.setItemdisc(rs.getString(4));    
+	            e.setItemkey(rs.getString(5));    
+	            e.setItemuom(rs.getString(6));    
+	            return e;    
+	        }    
+	    });    
 	}
 	
 }

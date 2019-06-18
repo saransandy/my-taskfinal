@@ -3,24 +3,24 @@ package online11;
 public class invoiceData {
 	int invoice_id;
 	String itemname;
-	int item_quantity;
-	int item_price;
-	String cust_id;
+	String item_quantity;
+	String item_price;
+	String customername;
 	int item_id;
 	int grand_total;
-	
+	String date_and_time;
 	public invoiceData() {
 		
 	}
 
 
-	public invoiceData(int invoice_id, String itemname, int item_quantity, int item_price, String cust_id,
+	public invoiceData(int invoice_id, String itemname, String item_quantity, String item_price, String customername,
 			int item_id) {
 		this.invoice_id = invoice_id;
 		this.itemname = itemname;
 		this.item_quantity = item_quantity;
 		this.item_price = item_price;
-		this.cust_id = cust_id;
+		this.customername = customername;
 		this.item_id = item_id;
 	}
 
@@ -55,33 +55,33 @@ public class invoiceData {
 	}
 
 
-	public int getItem_quantity() {
+	public String getItem_quantity() {
 		return item_quantity;
 	}
 
 
-	public void setItem_quantity(int item_quantity) {
+	public void setItem_quantity(String item_quantity) {
 		this.item_quantity = item_quantity;
 	}
 
 
-	public int getItem_price() {
+	public String getItem_price() {
 		return item_price;
 	}
 
 
-	public void setItem_price(int item_price) {
+	public void setItem_price(String item_price) {
 		this.item_price = item_price;
 	}
 
 
-	public String getCust_id() {
-		return cust_id;
+	public String getcustomername() {
+		return customername;
 	}
 
 
-	public void setCust_id(String cust_id) {
-		this.cust_id = cust_id;
+	public void setcustomername(String customername) {
+		this.customername = customername;
 	}
 
 
@@ -95,13 +95,25 @@ public class invoiceData {
 	}
 
 
+	public String getDate_and_time() {
+		return date_and_time;
+	}
+
+
+	public void setDate_and_time(String date_and_time) {
+		this.date_and_time = date_and_time;
+	}
+
+
 	@Override
 	public String toString() {
 		return "invoiceData [invoice_id=" + invoice_id + ", itemname=" + itemname + ", item_quantity=" + item_quantity
-				+ ", item_price=" + item_price + ", cust_id=" + cust_id + ", item_id=" + item_id + ", grand_total="
-				+ grand_total + "]";
+				+ ", item_price=" + item_price + ", customername=" + customername + ", item_id=" + item_id + ", grand_total="
+				+ grand_total + ", date_and_time=" + date_and_time + "]";
 	}
 
+
+	
 
 	
 	

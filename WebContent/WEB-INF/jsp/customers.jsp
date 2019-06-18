@@ -250,6 +250,29 @@ input[type=number]::-webkit-outer-spin-button {
 </head>
 
 <body>
+ <script>
+          function readyList() {
+      	    $(function () {
+      	        var xhr = new XMLHttpRequest();
+      	        xhr.onreadystatechange = function () {
+      	            if (xhr.readyState == 4 && xhr.status == 200) {
+      	                var items = xhr.responseText;
+      	                console.log(items);
+						items = JSON.parse(items);
+      	                var list = "";
+      	                for (var i = 0; i < items.length; i++) {
+          	                var item = items[i]["customer_name"];
+      	                    list += '<option value="' + item + '"></option>'
+      	                }
+      	                document.getElementById("list").innerHTML += list;
+      	            }
+      	        }
+      	        xhr.open("POST", "customersInvoice", true);
+      	        xhr.send();
+
+      	    });
+      	}          
+          </script>
     <h1 id="user"> </h1>
     <div class="box1">
     <form:form action="check" modelAttribute="con">
@@ -265,7 +288,9 @@ input[type=number]::-webkit-outer-spin-button {
 
     <div id="customers" style="visibility: visible;">
         <div id="login1" class="box" style="visibility:visible;">
-            <a id="loop" class="w2-button w2-black" onclick="flipflop3()">ADD</a>
+            <a id="loop" class="w2-button w2-black" onclick="flipflop()">ADD</a>
+            <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
+            <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>
             <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
             <br><br>
             <div class="container">
@@ -292,8 +317,10 @@ input[type=number]::-webkit-outer-spin-button {
                 </table>
             </div>
         </div>
-        <form id="form1" class="box" style="visibility: hidden;" class="box" onsubmit="validateRegistration(); return false;">
-            <a class="w2-button w2-black" onclick="flipflop4()">Cancel</a>
+        <form id="form" class="box" style="visibility: hidden;" class="box" onsubmit="validateRegistration(); return false;">
+            <a class="w2-button w2-black" onclick="flipflop2()">Cancel</a>
+            <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
+            <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>
             <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
             <h1 style="text-align:center;">Adding a New Customer</h1>
             <input name="name" type="text" placeholder="Customer Name" maxlength="25" required>
@@ -309,10 +336,192 @@ input[type=number]::-webkit-outer-spin-button {
             <input name="pincode" type="text" placeholder="Pin Code" required pattern="[1-9]{1}[0-9]{5}" title="Enter a valid pin-code number">
             <input type="submit" value="Done">
         </form>
-
+		<form id="form1" class="box" style="visibility: hidden;" class="box" onsubmit="update(); return false;">
+            <a class="w2-button w2-black" onclick="flipflop()">ADD</a>
+           <a class="w2-button w2-black" onclick="flipflop2()" style="left:10%">cancel</a>
+            <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>
+           
+            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <h1 style="text-align:center;">Update Customer</h1>
+            <input name="name" type="text" list="datalist" placeholder="Customer Name" onclick="readyList()" onchange="autofill1()" maxlength="25" required>
+            <datalist id="datalist">		
+			<div id="list"></div>
+           </datalist>
+            <input name="firstname" type="text" placeholder="Customer First Name" maxlength="25" required>
+            <input name="lastname" type="text" placeholder="Customer Last Name" maxlength="25" required>
+            <input name="phno" type="text" placeholder="Phone number" required pattern="[6-9]{1}[0-9]{9}" title="Enter a valid mobile number">
+            <input name="dob" type="date" placeholder="date of birth" max="2010-12-31">
+            <input name="email" type="email" placeholder="Email ID" required>
+            <input name="fax" type="text" placeholder="Fax number" required pattern="[1-9]{1}[0-9]{6}" title="Enter a valid fax number">
+            <input name="address" type="text" placeholder="Address" maxlength="60" required>
+            <input name="city" type="text" placeholder="City" maxlength="25" required>
+            <input name="state" type="text" placeholder="State" maxlength="25" required>
+            <input name="pincode" type="text" placeholder="Pin Code" required pattern="[1-9]{1}[0-9]{5}" title="Enter a valid pin-code number">
+            <input type="submit" value="update">
+        </form>
+        <form id="form2" class="box" style="visibility: hidden;" class="box" onsubmit="delete1(); return false;">
+            <a class="w2-button w2-black" onclick="flipflop()">ADD</a>
+            <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
+            <a class="w2-button w2-black" onclick="flipflop2()"  style="left:20%">cancel</a>
+            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <h1 style="text-align:center;">Delete a Customer</h1>
+            <input name="name" type="text" list="datalist" placeholder="Customer Name" onclick="readyList()" onchange="autofill()" maxlength="25" required>
+            <datalist id="datalist">		
+			<div id="list"></div>
+           </datalist>
+            <input name="firstname" type="text" placeholder="Customer First Name" maxlength="25" readonly>
+            <input name="lastname" type="text" placeholder="Customer Last Name" maxlength="25" readonly>
+            <input name="phno" type="text" placeholder="Phone number" required pattern="[6-9]{1}[0-9]{9}" title="Enter a valid mobile number" readonly>
+            <input name="dob" type="date" placeholder="date of birth" max="2010-12-31" readonly>
+            <input name="email" type="email" placeholder="Email ID" readonly>
+            <input name="fax" type="text" placeholder="Fax number" required pattern="[1-9]{1}[0-9]{6}" title="Enter a valid fax number" readonly>
+            <input name="address" type="text" placeholder="Address" maxlength="60" readonly>
+            <input name="city" type="text" placeholder="City" maxlength="25" readonly>
+            <input name="state" type="text" placeholder="State" maxlength="25" readonly>
+            <input name="pincode" type="text" placeholder="Pin Code" required pattern="[1-9]{1}[0-9]{5}" title="Enter a valid pin-code number" readonly>
+            <input type="submit" value="Delete">
+        </form>
     </div>
     <script type="text/javascript">
     onafter();
+    function autofill(){
+		
+		var deleteid = 2;
+		var customername = document.getElementsByName("name")[deleteid].value;
+	    var xhr = new XMLHttpRequest();
+	    var firstname = "";
+	    var lastname = "";
+	    var phno = "";
+	    var dob = "";
+	    var email = "";
+	    var fax ="";
+	    var address ="";
+	    var city = "";
+	    var state = "";
+	    var pincode = "";
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState==4 && xhr.status == 200){
+				var response = xhr.responseText;
+				console.log(response);
+				response = JSON.parse(response);
+				firstname = response[0]["customer_firstname"];
+			    lastname = response[0]["customer_lastname"];
+			    phno = response[0]["customer_phno"];
+			    dob = response[0]["customer_dob"];
+			    email = response[0]["customer_emailid"];
+			    fax = response[0]["customer_fax"];
+			    address = response[0]["customer_address"];
+			    city = response[0]["customer_city"];
+			    state = response[0]["customer_state"];
+			    pincode = response[0]["customer_pin"];
+				document.getElementsByName("firstname")[deleteid].value = firstname;
+				document.getElementsByName("lastname")[deleteid].value = lastname;
+				document.getElementsByName("phno")[deleteid].value = phno;
+				document.getElementsByName("dob")[deleteid].value = dob;
+				document.getElementsByName("email")[deleteid].value = email;
+				document.getElementsByName("fax")[deleteid].value = fax;
+				document.getElementsByName("address")[deleteid].value = address;
+				document.getElementsByName("city")[deleteid].value = city;
+				document.getElementsByName("state")[deleteid].value = state;
+				document.getElementsByName("pincode")[deleteid].value = pincode;
+					
+			}
+		}
+		var url = 'Deletecustomer?customername=' + customername;  
+		xhr.open("POST",url,true);
+		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xhr.send(); 
+	}
+function autofill1(){
+		
+		var deleteid = 1;
+		var customername = document.getElementsByName("name")[deleteid].value;
+	    var xhr = new XMLHttpRequest();
+	    var firstname = "";
+	    var lastname = "";
+	    var phno = "";
+	    var dob = "";
+	    var email = "";
+	    var fax ="";
+	    var address ="";
+	    var city = "";
+	    var state = "";
+	    var pincode = "";
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState==4 && xhr.status == 200){
+				var response = xhr.responseText;
+				console.log(response);
+				response = JSON.parse(response);
+				firstname = response[0]["customer_firstname"];
+			    lastname = response[0]["customer_lastname"];
+			    phno = response[0]["customer_phno"];
+			    dob = response[0]["customer_dob"];
+			    email = response[0]["customer_emailid"];
+			    fax = response[0]["customer_fax"];
+			    address = response[0]["customer_address"];
+			    city = response[0]["customer_city"];
+			    state = response[0]["customer_state"];
+			    pincode = response[0]["customer_pin"];
+				document.getElementsByName("firstname")[deleteid].value = firstname;
+				document.getElementsByName("lastname")[deleteid].value = lastname;
+				document.getElementsByName("phno")[deleteid].value = phno;
+				document.getElementsByName("dob")[deleteid].value = dob;
+				document.getElementsByName("email")[deleteid].value = email;
+				document.getElementsByName("fax")[deleteid].value = fax;
+				document.getElementsByName("address")[deleteid].value = address;
+				document.getElementsByName("city")[deleteid].value = city;
+				document.getElementsByName("state")[deleteid].value = state;
+				document.getElementsByName("pincode")[deleteid].value = pincode;
+					
+			}
+		}
+		var url = 'Deletecustomer?customername=' + customername;  
+		xhr.open("POST",url,true);
+		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xhr.send(); 
+	}
+	function update(){
+		var name = document.getElementsByName("name")[1].value;
+        var firstname = document.getElementsByName("firstname")[1].value;
+        var lastname = document.getElementsByName("lastname")[1].value;
+        var phno = document.getElementsByName("phno")[1].value;
+        var dob = document.getElementsByName("dob")[1].value;
+        var email = document.getElementsByName("email")[1].value;
+        var fax = document.getElementsByName("fax")[1].value;
+        var address = document.getElementsByName("address")[1].value;
+        var city = document.getElementsByName("city")[1].value;
+        var state = document.getElementsByName("state")[1].value;
+        var pincode = document.getElementsByName("pincode")[1].value;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function (ev) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+            }
+        }
+        var url = "updatecustomer?" + "name=" + name + "&firstname=" + firstname + "&lastname=" + lastname + "&phno=" + phno + "&dob=" + dob + "&email=" + email + "&fax=" + fax + "&address=" + address + "&city=" + city + "&state=" + state + "&pincode=" + pincode;
+        console.log(url);
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send();
+        flipflop2();
+	}
+	function delete1(){
+		var no=0;
+        var item = document.getElementsByName("name")[2].value;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState==4 && xhr.status==200){
+            	var item343=xhr.responeText;
+            	console.log(item343);
+            }
+        }
+        var url ="&customername="+item;
+        console.log(url);
+        url="deletecustomers?"+url;
+        xhr.open("POST",url,true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send();
+        flipflop2();
+	}
     /* var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -369,21 +578,33 @@ input[type=number]::-webkit-outer-spin-button {
         xhr.send();
         flipflop2();
     }
-    function flipflop() {
-        document.getElementById('form').style.visibility = 'visible';
-        document.getElementById('login').style.visibility = 'hidden';
+    function flipflop(){
+    	document.getElementById('form').style.visibility = 'visible';
+    	document.getElementById('login1').style.visibility = 'hidden';
+    	document.getElementById('form1').style.visibility = 'hidden';
+    	document.getElementById('form2').style.visibility = 'hidden';
+
     }
-    function flipflop2() {
-        document.getElementById('form').style.visibility = 'hidden';
-        document.getElementById('login').style.visibility = 'visible';
+    function flipflop2(){
+    	document.getElementById('form').style.visibility = 'hidden';
+    	document.getElementById('login1').style.visibility = 'visible';
+    	document.getElementById('form1').style.visibility = 'hidden';
+    	document.getElementById('form2').style.visibility = 'hidden';
+    	document.getElementById('form').reset();
     }
-    function flipflop3() {
-        document.getElementById('form1').style.visibility = 'visible';
-        document.getElementById('login1').style.visibility = 'hidden';
+    function flipflop3(){
+    	document.getElementById('form1').style.visibility = 'visible';
+    	document.getElementById('form').style.visibility = 'hidden';
+    	document.getElementById('login1').style.visibility = 'hidden';
+    	document.getElementById('form2').style.visibility = 'hidden';
+
     }
-    function flipflop4() {
-        document.getElementById('form1').style.visibility = 'hidden';
-        document.getElementById('login1').style.visibility = 'visible';
+    function flipflop4(){
+    	document.getElementById('form2').style.visibility = 'visible';
+    	document.getElementById('form').style.visibility = 'hidden';
+    	document.getElementById('login1').style.visibility = 'hidden';
+    	document.getElementById('form1').style.visibility = 'hidden';
+
     }
     function items() {
         var xhr = new XMLHttpRequest();
