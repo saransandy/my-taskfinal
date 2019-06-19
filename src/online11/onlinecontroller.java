@@ -30,48 +30,50 @@ public class onlinecontroller {
 		return "index";
 	}	
 	@RequestMapping(value="/index.html")
-	public String index(Model m) {
-		m.addAttribute("con", new itemData());
+	public String index() {
 		id=null;
 		user=null;
-		Cookie cookie = new Cookie("google.com", "");
-        cookie.setMaxAge(0);
-//        response.addCookie(cookie);
 		return "index";
 	}	
-	@RequestMapping("/check")  
-    public String check(Model m) {
-		m.addAttribute("con", new itemData());
+	@RequestMapping(value="/check")  
+    public String check() {	
+		System.out.print("id:"+id);
 		if(id==null) 
 			return "index";
 		else
-		return "items";
+			return "items";
 	}
 	
-	@RequestMapping("/customer")  
+	@RequestMapping(value="/customer")  
     public String customer(Model m) {
-		m.addAttribute("con", new itemData());
+		
 		if(id==null) 
 			return "index";
 		else
 		return "customers";
 	}
-	@RequestMapping("/invoice")  
-    public String invoice(Model m) {
-		m.addAttribute("con", new itemData());
+	@RequestMapping(value="/invoice")  
+    public String invoice() {
+		
 		if(id==null) 
 			return "index";
 		else
 		return "invoices";
 	}
-	@RequestMapping(value = "/Login", method = RequestMethod.POST)
+	@RequestMapping(value = "/caller")
 	@ResponseBody
-	public int Login(@RequestParam("custid") String id,@RequestParam("user") String user) {
+	public String Login(@RequestParam("id") String id,@RequestParam("user") String user) {
 		System.out.print("login");
-		this.id=id;
-		this.user=user;
-		return 0;
-		//return s;
+		if(id==null)	{
+			this.id=null;
+			this.user=null;
+			return "index";
+		}
+		else	 {
+			this.id=id;
+			this.user=user;
+			return "items";
+		}
 	}
 	@RequestMapping(value = "/additems", method = RequestMethod.POST)
 	@ResponseBody
@@ -79,7 +81,6 @@ public class onlinecontroller {
 		System.out.print("sdfghjk");
 		itemData col=new itemData(itemno,itemname,item_price,item_desc,item_key,item_uom);
 		return dao.add(col);
-		//return s;
 	}
 	@RequestMapping(value = "/deleteitems", method = RequestMethod.POST)
 	@ResponseBody
@@ -95,6 +96,18 @@ public class onlinecontroller {
 		itemData col=new itemData(itemno,itemname,item_price,item_desc,item_key,item_uom);
 		return dao.update(col);
 		//return s;
+	}
+	@RequestMapping(value = "/customerget", method = RequestMethod.POST)
+	@ResponseBody
+	public String customerget(@RequestParam("cusname") String cusname) {
+		List<customerData> l =  dao1.itemRetrival(cusname);
+		customerData list = (customerData) l.get(0);
+		String hole="";
+		hole+=list.getCustomer_address();
+		hole+=","+list.getCustomer_phno();
+		hole+=","+list.getCustomer_fax();
+		System.out.print(hole);
+	return hole ;
 	}
 	@RequestMapping(value = "/priceget", method = RequestMethod.POST)
 	@ResponseBody
@@ -160,7 +173,7 @@ public class onlinecontroller {
 	
 	@RequestMapping(value = "/InvoiceInsertion", method = RequestMethod.POST)
 	@ResponseBody
-	public int InvoiceInsertion(@RequestParam("itemnames") String itemnames,@RequestParam("itemprices") String itemprices,@RequestParam("itemquantities") String itemquans,@RequestParam("customer_name") String customersname) {
+	public String InvoiceInsertion(@RequestParam("itemnames") String itemnames,@RequestParam("itemprices") String itemprices,@RequestParam("itemquantities") String itemquans,@RequestParam("customer_name") String customersname) {
 		System.out.print("ItemsRetrival");
 		List<invoiceData> l=dao2.invoicelast();
 		invoiceData list = (invoiceData) l.get(0);
@@ -178,8 +191,9 @@ public class onlinecontroller {
 			int ids=list1.getItemid();
 			invoiceData inl=new invoiceData(invoiceidd,name[i],price[i],quan[i],customersname,ids);
 			int a=dao2.add(inl);
+			a+=a;
 		}
-		return 0;
+		return name[0];
 		//return s;
 	}
 	
@@ -190,15 +204,7 @@ public class onlinecontroller {
 
 		List<itemData> l =  dao.itemRetrival(itemname);
 		itemData list = (itemData) l.get(0);
-		System.out.println("List : " + list);
-		
-		int price = list.getItemprice();
-		String desc = list.getItemdisc();
-		String key = list.getItemkey();
-		String uom = list.getItemuom();
-		
-		System.out.print("price "+price+" desc "+desc +" key "+key);
-				
+		System.out.println("List : " + list);		
 		return l;
 
 	}

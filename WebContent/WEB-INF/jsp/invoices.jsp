@@ -4,7 +4,9 @@
 <html>
 
 <head></head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" id="bootstrap-css">
+	<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+    <meta name="google-signin-client_id" content="32808053626-i60ulo4dtmne97acvbmth579d2dffsi6.apps.googleusercontent.com">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" id="bootstrap-css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -111,10 +113,31 @@ padding-top:1%:
   background-color: #4CAF50;
   color: white;
 }
-.w3-button{border:none;display:inline-block;padding:8px 16px;vertical-align:middle;overflow:hidden;text-decoration:none;color:inherit;background-color:inherit;text-align:center;cursor:pointer;white-space:nowrap}
-.w3-black,.w3-hover-black:hover{border-radius:40%;color:#000!important;background-color:#fff!important;position: absolute;
-right: 10px;
-top:20px;}
+.w3-button {
+    border: none;
+    display: inline-block;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size:17px;
+    width:240px;
+}
+
+.w3-black,
+.w3-hover-black:hover {
+    border-radius: 40%;
+    color: #000!important;
+    background-color: #fff!important;
+    position: absolute;
+    right: 10px;
+    top: 20px;
+}
 html{    position: relative;
     padding-top: 2%;
 }
@@ -205,6 +228,7 @@ input[type=number]::-webkit-outer-spin-button {
     opacity:0.97;
     top:3%;
     color:#fff;
+    padding:10px;
 }
 datalist {
 	display: none;
@@ -220,6 +244,7 @@ input::-webkit-calendar-picker-indicator {
 <body>
 <script>
           function readyList() {
+        	  $("option").remove();
         	    $(function () {
         	        var xhr = new XMLHttpRequest();
         	        xhr.onreadystatechange = function () {
@@ -240,6 +265,7 @@ input::-webkit-calendar-picker-indicator {
         	    });
         	}
           function readyList1() {
+        	  $("option").remove();
       	    $(function () {
       	        var xhr = new XMLHttpRequest();
       	        xhr.onreadystatechange = function () {
@@ -262,20 +288,14 @@ input::-webkit-calendar-picker-indicator {
           </script>
     <h1 id="user"> </h1>
      <div class="box1">
-    <form:form action="check" modelAttribute="con">
-              <form:button class="w3-button">product</form:button>
-        </form:form>
-         <form:form action="customer" modelAttribute="con">
-              <form:button class="w3-button">customer</form:button>
-        </form:form>
-         <form:form action="invoice" modelAttribute="con">
-              <form:button class="w3-button">invoice</form:button>
-        </form:form>
+              <button class="w3-button" onclick="product()">product</button> 
+              <button class="w3-button" onclick="customer()">customer</button>
+              <button class="w3-button" onclick="invoice()">invoice</button>
     </div>
 
     <div id="login1" class="box" style="visibility:visible;">
         <a id="loop" class="w2-button w2-black" onclick="flipflop3()">ADD</a>
-        <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+        <a class="w3-button w3-black" style="width: 100px;" onclick="signOut()">Sign out</a>
         <br><br>
         <div class="container1">
             <table id="my-final-table">
@@ -304,12 +324,16 @@ input::-webkit-calendar-picker-indicator {
     <div id="form2" class="container" style="height:100vh;visibility:hidden;top:22%;width: 108vh;">
         <div class="row clearfix">
             <div class="col-md-6">
-            <input type="text" list="datalist1" name='customer_name' placeholder='Enter customer Name' class="form-control" onclick="readyList1()" required></input>
-            <datalist id="datalist1"> 		
-			<div id="list1"></div>
+            <input type="text" list="datalist1" name='cus_name' placeholder='Enter customer Name' class="form-control" onclick="readyList1()" onchange="customerchange()" required></input>
+            <datalist id="datalist1"> 	
+			<div id="list1"></div></datalist>	
+            <input type="text" name="cus_address" placeholder='customer_address' class="form-control" readonly></input>
+            <input type="text" name="cus_phno" placeholder='customer_phno' class="form-control" readonly></input>
+            <input type="text" name="cus_fax" placeholder='customer_fax' class="form-control" readonly></input>
             </div>
+            
             <div class="col-md-6">
-            <a class="w3-button w3-black" href="index.html" onclick="signOut();" style="left: 80%;">Sign out</a>
+            <a class="w3-button w3-black" style="width: 100px;" onclick="signOut()" style="left: 80%;">Sign out</a>
             </div>
         </div>
 
@@ -414,6 +438,23 @@ input::-webkit-calendar-picker-indicator {
 	}
 	xhr.open("GET", "Validate", true);
 	xhr.send(); */
+	function customerchange(){
+		var xhr = new XMLHttpRequest();
+	    var url = 'customerget?';
+	    var cusname = document.getElementsByName("cus_name")[0].value;
+	    xhr.onreadystatechange = function () {
+	        if (xhr.readyState == 4 && xhr.status == 200) {
+	            response = xhr.responseText;
+	            var price = response.split(",");
+	            document.getElementsByName("cus_address")[0].value = price[0];
+	            document.getElementsByName("cus_phno")[0].value = price[1];
+	            document.getElementsByName("cus_fax")[0].value = price[2];
+	        }
+	    }
+	    url += "cusname=" + cusname;
+	    xhr.open("POST", url, true);
+	    xhr.send();
+	}
 	function flipflop() {
 	    document.getElementById('form').style.visibility = 'visible';
 	    document.getElementById('login').style.visibility = 'hidden';
@@ -427,17 +468,17 @@ input::-webkit-calendar-picker-indicator {
 	    document.getElementById('form2').style.visibility = 'visible';
 	}
 	function flipflop4() {
-	    document.getElementById('form1').style.visibility = 'hidden';
+	    document.getElementById('form2').style.visibility = 'hidden';
 	    document.getElementById('login1').style.visibility = 'visible';
 	}
 	function product() {
-	    window.location.href = "home.html";
+	    window.location.href = "check";
 	}
 	function customer() {
-	    window.location.href = "customer.html";
+	    window.location.href = "customer";
 	}
 	function invoice() {
-	    window.location.href = "newinvoice.html";
+	    window.location.href = "invoice";
 	}
 	function itemprice() {
 	    var xhr = new XMLHttpRequest();
@@ -483,6 +524,7 @@ input::-webkit-calendar-picker-indicator {
 	            for (var i = 0; i < price.length; i++) {
 	                itemprice[i].value = price[i];
 	            }	
+	            
 			}
 		}
 		var url = 'priceget?itemname=' + itemnames;  
@@ -497,7 +539,7 @@ input::-webkit-calendar-picker-indicator {
 	    var itemnames = "";
 	    var itemprices = "";
 	    var itemquantities = "";
-	    var customersname=document.getElementsByName("customer_name")[0].value;
+	    var customersname=document.getElementsByName("cus_name")[0].value;
 	    for (var i = 0; i < namesObj.length; i++) {
 	        if (i != 0) {
 	            itemnames += ",";
@@ -521,13 +563,15 @@ input::-webkit-calendar-picker-indicator {
 	    xhr.onreadystatechange = new function () {
 	        if (xhr.readyState == 4 && xhr.status == 200) {
 	            var response = xhr.responseText;
-	            alert("Inserted");
+	            console.log("refresh");
+	            window.location.href="invoice";
 	        }
 	    }
 	    url += "itemnames=" + itemnames + "&itemprices=" + itemprices + "&itemquantities=" + itemquantities+"&customer_name="+customersname;
 	    console.log("URL : " + url);
 	    xhr.open("POST", url, true);
 	    xhr.send();
+	    flipflop4();
 	}
 	$(document).ready(function () {
 	    var i = 1;
@@ -573,6 +617,21 @@ input::-webkit-calendar-picker-indicator {
 	    $('#tax_amount').val(tax_sum.toFixed(2));
 	    $('#total_amount').val((tax_sum + total).toFixed(2));
 	}
+	 function others(){
+    	 window.location.href='index.html';
+    }
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log('User signed out.');
+        });
+       others();
+      }
+        function onLoad() {
+            gapi.load('auth2', function() {
+              gapi.auth2.init();
+            });
+      }
   </script>
     </body>
 </html>

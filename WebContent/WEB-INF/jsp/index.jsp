@@ -41,15 +41,27 @@
 </head>
 
 <body>
+
     <div id="login" class="box">
         <h1>Login</h1>
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
-        <form:form action="check" modelAttribute="con">
-              <form:button id="next">Click here to continue</form:button>
-        </form:form>
+        <!-- <a href="#" onclick="signOut();">Sign out</a> -->
+
+              <button onclick="caller()">Click here to continue</button>
         
     </div>
+    <script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
+
      <script type="text/javascript">
+     var user=null;
+     var id=null;
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -58,7 +70,9 @@
             console.log('Image URL: ' + profile.getImageUrl());
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
             var xhr = new XMLHttpRequest();
-            var url = "Login?custid=" + profile.getId() + "&user=" + profile.getName();
+            user=profile.getName();;
+            id=profile.getId();
+            /* var url = "Login?custid=" + profile.getId() + "&user=" + profile.getName();
             xhr.onreadystatechange = function() {
                 if (xhr.status == 200 && xhr.readyState == 4) {
                     var reply = xhr.responseText;
@@ -68,8 +82,20 @@
                     }
                 }
             }
-
             xhr.open("POST", url, true);
+            xhr.send(); */
+        }
+        function caller(){   
+        	var xhr = new XMLHttpRequest();
+        	var url = "caller?id=" + id + "&user=" + user;
+        	xhr.onreadystatechange = function() {
+                if (xhr.status == 200 && xhr.readyState == 4) {
+                	if(user==null){}
+                	else{
+                	window.location.href = 'check';}
+                }
+        }
+        	xhr.open("POST", url, true);
             xhr.send();
         }
     </script>

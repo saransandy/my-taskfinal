@@ -111,7 +111,9 @@ th a:hover {
     background-color: inherit;
     text-align: center;
     cursor: pointer;
-    white-space: nowrap
+    white-space: nowrap;
+    font-size:17px;
+    width:240px;
 }
 
 .w3-black,
@@ -258,6 +260,7 @@ input[type=number]::-webkit-outer-spin-button {
 <body>
     <script>
           function readyList() {
+        	  $("option").remove();
       	    $(function () {
       	        var xhr = new XMLHttpRequest();
       	        xhr.onreadystatechange = function () {
@@ -281,15 +284,9 @@ input[type=number]::-webkit-outer-spin-button {
 
     <h1 id="user"> </h1>
     <div class="box1">
-    <form:form action="check" modelAttribute="con">
-              <form:button class="w3-button">product</form:button>
-        </form:form>
-         <form:form action="customer" modelAttribute="con">
-              <form:button class="w3-button">customer</form:button>
-        </form:form>
-         <form:form action="invoice" modelAttribute="con">
-              <form:button class="w3-button">invoice</form:button>
-        </form:form>
+     <button class="w3-button" onclick="product()">product</button> 
+              <button class="w3-button" onclick="customer()">customer</button>
+              <button class="w3-button" onclick="invoice()">invoice</button>
     </div>
 
     <div id="products" style="visibility:visible">
@@ -297,7 +294,7 @@ input[type=number]::-webkit-outer-spin-button {
             <a id="loop" class="w2-button w2-black" onclick="flipflop()">ADD</a>
             <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
             <a class="w2-button w2-black" onclick="flipflop4()" style="left:20%">delete</a>
-            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <a class="w3-button w3-black" style="width: 70px;" onclick="signOut()">Sign out</a>
             <br><br>
             <div class="container">
                 <table id="my-final-table">
@@ -334,7 +331,7 @@ input[type=number]::-webkit-outer-spin-button {
             <a class="w2-button w2-black" onclick="flipflop2()">Cancel</a>
             <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
             <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>
-            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <a class="w3-button w3-black" style="width: 70px;" onclick="signOut()">Sign out</a>
             <h1 style="text-align:center;">Adding a New Product</h1>
             <input name="item" type="text" placeholder="Item Name" maxlength="25" required>
             <input name="price" type="text" placeholder="Item price" required pattern="[1-9]{1}[0-9]{1,5}" title="Enter a valid mobile number">
@@ -347,7 +344,7 @@ input[type=number]::-webkit-outer-spin-button {
             <a class="w2-button w2-black" onclick="flipflop()">ADD</a>
             <a class="w2-button w2-black" onclick="flipflop2()" style="left:10%">cancel</a>
             <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>
-            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <a class="w3-button w3-black" style="width: 70px;" onclick="signOut()">Sign out</a>
             <h1 style="text-align:center;">update a Product</h1>
             
             <input name="item" type="text" list="datalist" placeholder="Item Name" maxlength="25" onclick="readyList()" onchange="autofill1()" required>
@@ -364,7 +361,7 @@ input[type=number]::-webkit-outer-spin-button {
             <a class="w2-button w2-black" onclick="flipflop()">ADD</a>
             <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
             <a class="w2-button w2-black" onclick="flipflop2()"  style="left:20%">cancel</a>
-            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <a class="w3-button w3-black" style="width: 70px;" onclick="signOut()">Sign out</a>
             <h1 style="text-align:center;">Delete a Product</h1>
             <input name="item" type="text" list="datalist" placeholder="Item Name" maxlength="25" onclick="readyList()" onchange="autofill()" required>
             <datalist id="datalist">		
@@ -393,6 +390,7 @@ input[type=number]::-webkit-outer-spin-button {
 	            if(xhr.readyState==4 && xhr.status==200){
 	            	var item343=xhr.responeText;
 	            	console.log(item343);
+	            	window.location.href="check";
 	            }
 	        }
 	        var url ="no="+no+"&itemname="+item+"&price="+price+"&desc="+desc+"&key="+key+"&uom="+uom;
@@ -402,6 +400,7 @@ input[type=number]::-webkit-outer-spin-button {
 	        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	        xhr.send();
 	        flipflop2();
+	        
 		}
 		function delete1(){
 			var no=0;
@@ -411,6 +410,7 @@ input[type=number]::-webkit-outer-spin-button {
 	            if(xhr.readyState==4 && xhr.status==200){
 	            	var item343=xhr.responeText;
 	            	console.log(item343);
+	            	window.location.href="check";
 	            }
 	        }
 	        var url ="&itemname="+item;
@@ -420,6 +420,7 @@ input[type=number]::-webkit-outer-spin-button {
 	        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	        xhr.send();
 	        flipflop2();
+	        
 		}
     	function autofill(){
     	    		
@@ -500,18 +501,15 @@ input[type=number]::-webkit-outer-spin-button {
 	xhr.open("POST","Validate",true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.send(); */
-	function product()
-	{
-		window.location.href = "home.html";
-		}
-	function customer()
-	{
-		window.location.href = "customer.html";}
-	function invoice()
-	{
-		window.location.href = "newinvoice.html";
-		}
-
+	function product() {
+	    window.location.href = "check";
+	}
+	function customer() {
+	    window.location.href = "customer";
+	}
+	function invoice() {
+	    window.location.href = "invoice";
+	}
     function validateRegistration() {
                 register();
     }
@@ -527,6 +525,7 @@ input[type=number]::-webkit-outer-spin-button {
             if(xhr.readyState==4 && xhr.status==200){
             	var item343=xhr.responeText;
             	console.log(item343);
+            	window.location.href="check";
             }
         }
         var url ="no="+no+"&itemname="+item+"&price="+price+"&desc="+desc+"&key="+key+"&uom="+uom;
@@ -536,6 +535,7 @@ input[type=number]::-webkit-outer-spin-button {
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.send();
         flipflop2();
+        onafter();
         
     }      
     function flipflop(){
@@ -583,19 +583,15 @@ input[type=number]::-webkit-outer-spin-button {
     	xhr.open("POST","ItemsRetrival",true);
     	xhr.send();
     	}
+    function others(){
+    	 window.location.href='index.html';
+    }
       function signOut() {
-    	  var xhr = new XMLHttpRequest();
-    		xhr.onreadystatechange = function(){
-    			if(xhr.readyState==4 && xhr.status == 200){
-    				alert("LOGGED OUT");
-    			}
-    		}
-    		xhr.open("GET","Logout",true);
-    		xhr.send();
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
           console.log('User signed out.');
         });
+       others();
       }
         function onLoad() {
             gapi.load('auth2', function() {

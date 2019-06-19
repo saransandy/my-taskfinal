@@ -105,7 +105,9 @@ th a:hover {
     background-color: inherit;
     text-align: center;
     cursor: pointer;
-    white-space: nowrap
+    white-space: nowrap;
+    width:230px;
+    font-size:17px;
 }
 
 .w3-black,
@@ -252,6 +254,7 @@ input[type=number]::-webkit-outer-spin-button {
 <body>
  <script>
           function readyList() {
+        	  $("option").remove();
       	    $(function () {
       	        var xhr = new XMLHttpRequest();
       	        xhr.onreadystatechange = function () {
@@ -275,15 +278,9 @@ input[type=number]::-webkit-outer-spin-button {
           </script>
     <h1 id="user"> </h1>
     <div class="box1">
-    <form:form action="check" modelAttribute="con">
-              <form:button class="w3-button">product</form:button>
-        </form:form>
-         <form:form action="customer" modelAttribute="con">
-              <form:button class="w3-button">customer</form:button>
-        </form:form>
-         <form:form action="invoice" modelAttribute="con">
-              <form:button class="w3-button">invoice</form:button>
-        </form:form>
+    		<button class="w3-button" onclick="product()">product</button> 
+              <button class="w3-button" onclick="customer()">customer</button>
+              <button class="w3-button" onclick="invoice()">invoice</button>
     </div>
 
     <div id="customers" style="visibility: visible;">
@@ -291,7 +288,7 @@ input[type=number]::-webkit-outer-spin-button {
             <a id="loop" class="w2-button w2-black" onclick="flipflop()">ADD</a>
             <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
             <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>
-            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+           <a class="w3-button w3-black" style="width: 70px;" onclick="signOut()">Sign out</a>
             <br><br>
             <div class="container">
                 <table id="my-final-table">
@@ -319,9 +316,9 @@ input[type=number]::-webkit-outer-spin-button {
         </div>
         <form id="form" class="box" style="visibility: hidden;" class="box" onsubmit="validateRegistration(); return false;">
             <a class="w2-button w2-black" onclick="flipflop2()">Cancel</a>
-            <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
-            <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>
-            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <a class="w2-button w2-black" onclick="flipflop3()" style="left:12%">update</a>
+            <a class="w2-button w2-black" onclick="flipflop4()" style="left:22%">delete</a>
+            <a class="w3-button w3-black" style="width: 70px;" onclick="signOut()">Sign out</a>
             <h1 style="text-align:center;">Adding a New Customer</h1>
             <input name="name" type="text" placeholder="Customer Name" maxlength="25" required>
             <input name="firstname" type="text" placeholder="Customer First Name" maxlength="25" required>
@@ -339,9 +336,8 @@ input[type=number]::-webkit-outer-spin-button {
 		<form id="form1" class="box" style="visibility: hidden;" class="box" onsubmit="update(); return false;">
             <a class="w2-button w2-black" onclick="flipflop()">ADD</a>
            <a class="w2-button w2-black" onclick="flipflop2()" style="left:10%">cancel</a>
-            <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>
-           
-            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <a class="w2-button w2-black" onclick="flipflop4()"  style="left:20%">delete</a>   
+            <a class="w3-button w3-black" style="width: 70px;" onclick="signOut()">Sign out</a>
             <h1 style="text-align:center;">Update Customer</h1>
             <input name="name" type="text" list="datalist" placeholder="Customer Name" onclick="readyList()" onchange="autofill1()" maxlength="25" required>
             <datalist id="datalist">		
@@ -363,7 +359,7 @@ input[type=number]::-webkit-outer-spin-button {
             <a class="w2-button w2-black" onclick="flipflop()">ADD</a>
             <a class="w2-button w2-black" onclick="flipflop3()" style="left:10%">update</a>
             <a class="w2-button w2-black" onclick="flipflop2()"  style="left:20%">cancel</a>
-            <a class="w3-button w3-black" href="index.html" onclick="signOut();">Sign out</a>
+            <a class="w3-button w3-black" style="width: 70px;" onclick="signOut()">Sign out</a>
             <h1 style="text-align:center;">Delete a Customer</h1>
             <input name="name" type="text" list="datalist" placeholder="Customer Name" onclick="readyList()" onchange="autofill()" maxlength="25" required>
             <datalist id="datalist">		
@@ -538,16 +534,14 @@ function autofill1(){
     xhr.send(); */
 
     function product() {
-        window.location.href = "home.html";
-    }
-
-    function customer() {
-        window.location.href = "customer.html";
-    }
-
-    function invoice() {
-        window.location.href = "newinvoice.html";
-    }
+	    window.location.href = "check";
+	}
+	function customer() {
+	    window.location.href = "customer";
+	}
+	function invoice() {
+	    window.location.href = "invoice";
+	}
 
     function validateRegistration() {
 
@@ -569,6 +563,7 @@ function autofill1(){
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function (ev) {
             if (xhr.readyState == 4 && xhr.status == 200) {
+            	window.location.href="customer";
             }
         }
         var url = "Addingcustomer?" + "name=" + name + "&firstname=" + firstname + "&lastname=" + lastname + "&phno=" + phno + "&dob=" + dob + "&email=" + email + "&fax=" + fax + "&address=" + address + "&city=" + city + "&state=" + state + "&pincode=" + pincode;
@@ -619,26 +614,21 @@ function autofill1(){
         xhr.open("GET", "ItemsRetrival", true);
         xhr.send();
     }
-    function signOut() {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                alert("LOGGED OUT");
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut().then(function () {
-                    console.log('User signed out.');
-                });
-            }
-        }
-        xhr.open("GET", "Logout", true);
-        xhr.send();
-
-    }
-    function onLoad() {
-        gapi.load('auth2', function () {
-            gapi.auth2.init();
-        });
-    }
+    function others(){
+   	 window.location.href='index.html';
+   }
+     function signOut() {
+       var auth2 = gapi.auth2.getAuthInstance();
+       auth2.signOut().then(function () {
+         console.log('User signed out.');
+       });
+      others();
+     }
+       function onLoad() {
+           gapi.load('auth2', function() {
+             gapi.auth2.init();
+           });
+     }
     function onafter() {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
